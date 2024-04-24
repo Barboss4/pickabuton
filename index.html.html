@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roleta russa</title>
+    <style>
+        /* Estilo para a página */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+
+        /* Estilo para os botões */
+        .soundButton {
+            position: absolute;
+            display: inline-block; /* Corrigido para ser visível */
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Estilo para o texto */
+        h1 {
+            position: relative; /* Adicionado */
+            z-index: 1; /* Adicionado */
+        }
+
+        /* Estilo para o botão de jogar novamente */
+        .restartButton {
+            position: absolute;
+            padding: 30px 30px;
+            bottom: 200px; /* Distância do fundo */
+            left: 50%; /* Alinhamento central */
+            transform: translateX(-50%); /* Alinhamento central */
+            z-index: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Os botões serão adicionados aqui -->
+    <audio id="myAudio">
+        <source src="errou_3.mp3" type="audio/mp3">
+    </audio>
+
+    <audio id="myAudio2">
+        <source src="acertou.mp3" type="audio/mp3"> <!-- Substitua pela URL do seu segundo som -->
+    </audio>
+
+    <div>
+        <h1>Clique em um dos botões e tente a sorte!!!</h1>
+    </div>
+
+    <script>
+        // Função para criar e posicionar os botões
+        function createButtons() {
+
+
+            // Criação do botão para exibir mensagem e esconder os botões
+            var messageButton = document.createElement("button");
+            messageButton.className = "soundButton";
+            messageButton.innerText = "Me clique";
+            messageButton.onclick = function() {
+                var h1 = document.querySelector("h1");
+                h1.innerText = "Parabéns, você ganhou!";
+                var buttons = document.getElementsByClassName("soundButton");
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].style.display = "none";
+                    
+                }
+                playSound2();
+
+
+                // Criando botão para reiniciar a página
+                var restartButton = document.createElement("button");
+                restartButton.className = "restartButton";
+                restartButton.innerText = "Jogar novamente";
+                restartButton.onclick = function() {
+                    location.reload();
+                };
+                document.body.appendChild(restartButton);
+            };
+            document.body.appendChild(messageButton);
+
+            // Criação do botão para reproduzir som
+            for (var i = 0; i < 30; i++) {
+                var button = document.createElement("button");
+                button.className = "soundButton";
+                button.innerText = "Me clique";
+                button.onclick = playSound;
+    // Gerando cor aleatória para o botão
+                button.style.backgroundColor = getRandomColor();
+                document.body.appendChild(button);
+            }
+
+        }
+
+        // Função para mover um botão para uma nova posição aleatória
+        function moveButton(button) {
+            var screenWidth = window.innerWidth;
+            var screenHeight = window.innerHeight;
+            var newLeft = Math.random() * (screenWidth - button.offsetWidth);
+            var newTop = Math.random() * (screenHeight - button.offsetHeight);
+            button.style.left = newLeft + "px";
+            button.style.top = newTop + "px";
+        }
+
+        // Função para reproduzir o som
+        function playSound() {
+            var audio = document.getElementById("myAudio");
+            audio.currentTime = 0; // Reinicia a reprodução do áudio
+            audio.play();
+
+        }
+        // Função para reproduzir o segundo som
+        function playSound2() {
+            var audio = document.getElementById("myAudio2"); // Seleciona o segundo elemento de áudio
+            audio.play();
+        }
+
+        // Função para gerar uma cor aleatória
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Cria os botões
+        createButtons();
+
+        // Move cada botão a cada segundo
+        var buttons = document.getElementsByClassName("soundButton");
+        setInterval(function() {
+            for (var i = 0; i < buttons.length; i++) {
+                moveButton(buttons[i]);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
