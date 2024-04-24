@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roleta russa</title>
+    <title>Pick a button</title>
     <style>
         /* Estilo para a página */
         body {
@@ -17,7 +17,6 @@
             height: 100vh;
             text-align: center;
         }
-
 
         /* Estilo para os botões */
         .soundButton {
@@ -42,10 +41,38 @@
             position: absolute;
             padding: 30px 30px;
             bottom: 200px; /* Distância do fundo */
+            background-color: #ff6600; /* Cor de fundo do botão */
+            color: #ffffff;
+            border: none; /* Remove a borda do botão */
+            border-radius: 10px; /* Adiciona bordas arredondadas */
             left: 50%; /* Alinhamento central */
             transform: translateX(-50%); /* Alinhamento central */
             z-index: 1;
         }
+        .buttons:hover {
+            background-color: #ff8533; /* Altera a cor de fundo quando o mouse passa sobre o botão */
+        }
+
+        .buttonContainer {
+            margin-top: 20px; /* Espaço entre o h1 e os botões */
+        }
+        
+        .buttons {
+            padding: 15px 25px; /* Ajuste o padding para aumentar o tamanho do botão */
+            font-size: 18px; /* Ajuste o tamanho da fonte */
+            background-color: #ff6600; /* Cor de fundo do botão */
+            color: #ffffff; /* Cor do texto do botão */
+            border: none; /* Remove a borda do botão */
+            border-radius: 10px; /* Adiciona bordas arredondadas */
+            cursor: pointer; /* Altera o cursor ao passar o mouse sobre o botão */
+            transition: background-color 0.3s; /* Adiciona uma transição suave na mudança de cor de fundo */
+        }
+        
+        .buttons:hover {
+            background-color: #ffffff;
+            color: #ff8533; /* Altera a cor de fundo quando o mouse passa sobre o botão */
+        }
+
 
     </style>
 </head>
@@ -61,15 +88,32 @@
 
     <div>
         <h1>Clique em um dos botões e tente a sorte!!!</h1>
+    
+    <!-- Div para os botões -->
+    <div class="buttonContainer">
+        <!-- Botões para iniciar a criação dos botões -->
+        <button id="startButton1" onclick="createButtons(5)" class="buttons">Fácil</button>
+        <button id="startButton2" onclick="createButtons(10)"class="buttons">Médio</button>
+        <button id="startButton3" onclick="createButtons(20)"class="buttons">Difícil</button>
+
+    </div>
     </div>
 
     <script>
         // Função para criar e posicionar os botões
-        function createButtons() {
+        function createButtons(X) {
+            // Oculta o botão de iniciar
+            document.getElementById("startButton1").style.display = "none";
+            document.getElementById("startButton2").style.display = "none";
+            document.getElementById("startButton3").style.display = "none";
 
+            // Limpa o texto do h1
+            document.querySelector("h1").innerText = "";
 
             // Criação do botão para exibir mensagem e esconder os botões
             var messageButton = document.createElement("button");
+            messageButton.style.backgroundColor = getRandomColor();
+            document.body.appendChild(messageButton);
             messageButton.className = "soundButton";
             messageButton.innerText = "Me clique";
             messageButton.onclick = function() {
@@ -78,10 +122,9 @@
                 var buttons = document.getElementsByClassName("soundButton");
                 for (var i = 0; i < buttons.length; i++) {
                     buttons[i].style.display = "none";
-                    
+
                 }
                 playSound2();
-
 
                 // Criando botão para reiniciar a página
                 var restartButton = document.createElement("button");
@@ -95,16 +138,19 @@
             document.body.appendChild(messageButton);
 
             // Criação do botão para reproduzir som
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < X; i++) {
                 var button = document.createElement("button");
                 button.className = "soundButton";
                 button.innerText = "Me clique";
                 button.onclick = playSound;
-    // Gerando cor aleatória para o botão
-                button.style.backgroundColor = getRandomColor();
+
+                if (X !== 5) {
+                    // Gerando cor aleatória para o botão
+                    button.style.backgroundColor = getRandomColor();
+                }
+                
                 document.body.appendChild(button);
             }
-
         }
 
         // Função para mover um botão para uma nova posição aleatória
@@ -122,8 +168,8 @@
             var audio = document.getElementById("myAudio");
             audio.currentTime = 0; // Reinicia a reprodução do áudio
             audio.play();
-
         }
+
         // Função para reproduzir o segundo som
         function playSound2() {
             var audio = document.getElementById("myAudio2"); // Seleciona o segundo elemento de áudio
@@ -140,16 +186,16 @@
             return color;
         }
 
-        // Cria os botões
-        createButtons();
-
-        // Move cada botão a cada segundo
-        var buttons = document.getElementsByClassName("soundButton");
-        setInterval(function() {
-            for (var i = 0; i < buttons.length; i++) {
-                moveButton(buttons[i]);
-            }
-        }, 2000);
+        // Cria os botões quando a página é carregada
+        window.onload = function() {
+            // Move cada botão a cada segundo
+            var buttons = document.getElementsByClassName("soundButton");
+            setInterval(function() {
+                for (var i = 0; i < buttons.length; i++) {
+                    moveButton(buttons[i]);
+                }
+            }, 2000);
+        };
     </script>
 </body>
 </html>
